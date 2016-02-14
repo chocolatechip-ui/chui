@@ -53,21 +53,21 @@ chui --name Fruits --lib chocolatechip --os ios --type tabbar
 chui --name Fruits --os win --type slideout
 ```
 
-You can also use shortened versions of the command flags: <code>n</code> for <code>name</code>, <code>p</code></code> for <code>path</code>, <code>l</code> for <code>lib</code>, and <code>t</code> for <code>type</code>:
+You can also use shortened versions of the command flags: <code>n</code> for <code>name</code>, <code>p</code></code> for <code>path</code>, <code>l</code> for <code>lib</code>, <code>t</code> for <code>type</code> and <code>o</code> for <code>os</code>:
 
 
 ```
 // Create a plain file in a folder named Fruits in ~/Documents/Dev 
 // with the Android theme, default libarary will be jQuery:
-chui -n Fruits -p ~/Documents/Dev/ --os android 
+chui -n Fruits -p ~/Documents/Dev/ -o android 
 
 // or create a tabbar interface in a folder Fruits on the desktop 
 // for iOS using the library ChocolateChipJS:
-chui -n Fruits -l chocolatechip --os ios -t tabbar
+chui -n Fruits -l chocolatechip -o ios -t tabbar
 
 // or create a slide out menu for Windows Phone in Fruits on the desktop, 
 // default libarary will be jQuery:
-chui -n Fruits --os win -t slideout
+chui -n Fruits -o win -t slideout
 ```
 
 When using the shortened forms, you can put a single hyphen:

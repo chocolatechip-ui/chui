@@ -9,10 +9,10 @@ var argv = require('yargs').usage('Usage: --name "Icecream" --path "~/Documents/
 var name = argv.name || argv.n;
 var homedir = (process.platform === "win32") ? process.env.HOMEPATH : process.env.HOME;
 var path = argv.path || argv.p || p.join(homedir, 'Desktop');
-var os = 'ios';
+var os = argv.os || argv.o || 'ios';
+var type = argv.type || argv.t
 var lib = "jquery";
 var whichLib = "http://code.jquery.com/jquery-2.1.4.min.js";
-if (argv.os) os = argv.os;
 if (argv.lib || argv.l) lib = argv.lib || argv.l;
 if (lib === 'chocolatechipjs') whichLib = "./chui/chocolatechipjs-4.0.4.js";
 var chuiVersion = "3.9.2";
@@ -383,11 +383,11 @@ var createProject = function() {
   if (name) {
     ncp.limit = 16;
     mkdirp(p.join(path, name), noop);
-    if ((argv.type && argv.type === 'navigation') || (argv.t && argv.t === 'navigation')) {
+    if (type && type === 'navigation') {
       writefile(p.join(path, name, 'index.html'), navigationTemplate, noop);
-    } else if ((argv.type && argv.type === 'tabbar') || (argv.t && argv.t === 'tabbar')) {
+    } else if (type && type === 'tabbar') {
       writefile(p.join(path, name, 'index.html'), tabbarTemplate, noop);
-    } else if ((argv.type && argv.type === 'slideout') || (argv.t && argv.t === 'slideout')) {
+    } else if (type && type === 'slideout') {
       writefile(p.join(path, name, 'index.html'), slideoutTemplate, noop);
     } else {
       writefile(p.join(path, name, 'index.html'), template, noop);
