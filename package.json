@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/sourcebits-robertbiggs/chui.git"
+    "url": "git+https://github.com/chocolatechip-ui/chui.git"
   },
   "keywords": [
     "JavaScript",
@@ -18,9 +18,9 @@
   "author": "Robert Biggs",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/sourcebits-robertbiggs/chui/issues"
+    "url": "https://github.com/chocolatechip-ui/issues"
   },
-  "homepage": "https://github.com/sourcebits-robertbiggs/chui#readme",
+  "homepage": "https://github.com/chocolatechip-ui/chui#readme",
   "dependencies": {
     "cpr": "^0.4.0",
     "mkdirp": "^0.5.0",
