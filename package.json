@@ -1,6 +1,6 @@
 {
   "name": "chui",
-  "version": "1.2.13",
+  "version": "2.0.0",
   "description": "A module for creating Web apps with ChocolateChip-UI",
   "main": "index.js",
   "bin": {
@@ -13,20 +13,29 @@
   "keywords": [
     "JavaScript",
     "ChocolateChip-UI",
-    "Hybrid App"
+    "Hybrid App",
+    "Mobile",
+    "Web App",
+    "iOS",
+    "Android"
   ],
   "author": "Robert Biggs",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/chocolatechip-ui/issues"
+    "url": "https://github.com/chocolatechip-ui/chui/issues"
   },
   "homepage": "https://github.com/chocolatechip-ui/chui#readme",
   "dependencies": {
-    "cpr": "^0.4.0",
-    "mkdirp": "^0.5.0",
+    "chocolatechipui": "git://github.com/chocolatechip-ui/chocolatechipui.git",
+    "argv": "0.0.2",
+    "cp-file": "^3.2.0",
+    "cpr": "^2.0.0",
+    "fs-cp": "^1.3.0",
+    "mkdirp": "^0.5.1",
     "ncp": "^2.0.0",
+    "rename": "^1.0.3",
+    "replace-in-file": "^1.1.3",
     "writefile": "^0.2.8",
-    "yargs": "^3.0.4",
-    "bluebird": "~2.9.24"
+    "yargs": "^3.0.4"
   }
 }
