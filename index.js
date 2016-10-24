@@ -17,6 +17,7 @@ var name = argv.name || argv.n;
 var homedir = (process.platform === "win32") ? process.env.HOMEPATH : process.env.HOME;
 var user = (process.platform === "win32") ? process.env.USERNAME : process.env.USER;
 var os = argv.os || argv.o || 'ios';
+os = os.toLowerCase();
 var pkg = require('./package.json');
 var type = argv.type || argv.t;
 var hybrid = argv.hybrid || argv.h;
