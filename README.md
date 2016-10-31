@@ -5,6 +5,9 @@ chui
 - Get hard work done fast
 - Use platform-specific themes
 
+
+ChocolateChip-UI supports iOS 9 and 10 using WkWebView for fast JavaScript rendering, and Android Jelly Bean to Nougat (4.2 - 7.0).
+
 ##Installation
 
 Just run (depending on your setup, you may need to run it with `sudo`):

@@ -67,7 +67,7 @@ class ViewController: UIViewController {\n\
     }\n\
   }\n\
   \n\
-  @IBOutlet var webView: UIWebView!\n\
+  @IBOutlet var webView: WKWebView!\n\
   override func viewDidLoad() {\n\
       \n\
     // Define location of local HTML file:\n\
@@ -80,7 +80,7 @@ class ViewController: UIViewController {\n\
     let request = URLRequest(url: url)\n\
     \n\
     // Tell the Web view to load the url request object:\n\
-    self.webView.loadRequest(request as URLRequest)\n\
+    self.webView.load(request as URLRequest)\n\
   }\n\
 }';
 

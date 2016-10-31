@@ -36,7 +36,6 @@ var website = argv.website || argv.w;
 var noop = function() {};
 
 var user = (process.platform === "win32") ? process.env.USERNAME : process.env.USER;
-console.log('The user is: ' + user)
 
 var chocolatechipui_path = p.join(__dirname, 'node_modules', 'chocolatechipui');
 
