@@ -363,7 +363,6 @@ if (chui_examples) {
 
 
       if (type && (type === 'navigation') || (type === 'n')) {
-        console.log('navigation process')
         ncp(p.join(chocolatechipui_path, 'cli-resources', 'for-desktop',  'chui-navigation', 'js'), p.join(path, name, 'js'), noop);
         ncp(p.join(chocolatechipui_path, 'cli-resources', 'for-desktop',  'chui-navigation', 'css'), p.join(path, name, 'css'), noop);
         cpFile(p.join(chocolatechipui_path, 'cli-resources', 'for-desktop',  'chui-navigation', 'index.html'), p.join(path, name, 'index.html'), noop);
