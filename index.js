@@ -12,7 +12,6 @@ var android = require('./android/templates/android.js');
 var gradle = require('./android/templates/gradle.js');
 var OS = require("os");
 var replace = require('replace-in-file');
-var rename = require('rename');
 var name = argv.name || argv.n;
 var homedir = (process.platform === "win32") ? process.env.HOMEPATH : process.env.HOME;
 var user = (process.platform === "win32") ? process.env.USERNAME : process.env.USER;
