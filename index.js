@@ -32,6 +32,18 @@ var reference_apps = argv.refapps || argv.r;
 var icons = argv.icons || argv.i || false;
 var website = argv.website || argv.w;
 
+var typings = argv.ts;
+
+var jsconfig = '{\n\
+  "compilerOptions": {\n\
+      "target": "ES6"\n\
+  },\n\
+  "exclude": [\n\
+      "node_modules",\n\
+      "jspm_modules"\n\
+  ]\n\
+}';
+
 var noop = function() {};
 
 var user = (process.platform === "win32") ? process.env.USERNAME : process.env.USER;
@@ -277,111 +289,62 @@ if (chui_examples) {
   return;
 
 /**
- * Create a project:
+ * Create a project for Web app development:
  */
 } else if (name) {
-  if (name === true) {
-    console.log('Please provide a name for the project with the -n flag.');
 
-  } else {
-    console.log('Creating a project named: ' + name);
-    if (jspm) {
-      console.log('This project uses JSPM so you can use ES6.');
-      console.log('It will require a build step to launch it.');
+  console.log('Creating a project named: ' + name);
 
-      ncp.limit = 16;
-      mkdirp(p.join(path, name), noop);
-      mkdirp(p.join(path, name, 'js'), noop);
-      mkdirp(p.join(path, name, 'dev'), noop);
-      ncp(p.join(chocolatechipui_path, 'dist', 'css'), p.join(path, name, 'css'), noop);
+  /**
+   * If user request typings, output TypeScript delcaration file.
+   */
+  if (typings) {
+    ncp(p.join(chocolatechipui_path, 'typings'), p.join(path, name, 'typings'), noop);
+    writefile(p.join(path, name, 'jsconfig.json'), jsconfig, noop);
 
-      cpFile(p.join(chocolatechipui_path, 'cli-resources', 'jspm', 'config.js'), p.join(path, name, 'config.js'), noop);
-      cpFile(p.join(chocolatechipui_path, 'cli-resources', 'jspm', 'gulpfile.js'), p.join(path, name, 'gulpfile.js'), noop);
-      cpFile(p.join(chocolatechipui_path, 'cli-resources', 'jspm', 'package.json'), p.join(path, name, 'package.json'), noop);
+  }
+  if (jspm) {
+    console.log('This project uses JSPM so you can write ES6 modules.');
+    console.log('It will require a build step to launch it.');
 
-      if (box) {
-        cpFile(p.join(chocolatechipui_path, 'dist', 'chui-box.min.js'), p.join(path, name, 'js', 'chui-box.min.js'), noop);
-        cpFile(p.join(chocolatechipui_path, 'dist', 'chui-box.min.js.map'), p.join(path, name, 'js', 'chui-box.min.js.map'), noop);
+    ncp.limit = 16;
+    mkdirp(p.join(path, name), noop);
+    mkdirp(p.join(path, name, 'js'), noop);
+    mkdirp(p.join(path, name, 'dev'), noop);
+    ncp(p.join(chocolatechipui_path, 'dist', 'css'), p.join(path, name, 'css'), noop);
 
-      } else {
-        cpFile(p.join(chocolatechipui_path, 'dist', 'chui.min.js'), p.join(path, name, 'js', 'chui.min.js'), noop);
-        cpFile(p.join(chocolatechipui_path, 'dist', 'chui.min.js.map'), p.join(path, name, 'js', 'chui.min.js.map'), noop);
+    cpFile(p.join(chocolatechipui_path, 'cli-resources', 'jspm', 'config.js'), p.join(path, name, 'config.js'), noop);
+    cpFile(p.join(chocolatechipui_path, 'cli-resources', 'jspm', 'gulpfile.js'), p.join(path, name, 'gulpfile.js'), noop);
+    cpFile(p.join(chocolatechipui_path, 'cli-resources', 'jspm', 'package.json'), p.join(path, name, 'package.json'), noop);
 
-      }
-
-      if (type === 'navigation') {
-        ncp(p.join(chocolatechipui_path, 'cli-resources', 'jspm',  'navigation', 'dev'), p.join(path, name, 'dev'), noop);
-        cpFile(p.join(chocolatechipui_path, 'cli-resources', 'jspm',  'navigation', 'index.html'), p.join(path, name, 'index.html'), noop);
-
-      } else if (type === 'slideout') {
-        ncp(p.join(chocolatechipui_path, 'cli-resources', 'jspm',  'slideout', 'dev'), p.join(path, name, 'dev'), noop);
-        cpFile(p.join(chocolatechipui_path, 'cli-resources', 'jspm',  'slideout', 'index.html'), p.join(path, name, 'index.html'), noop);
-
-      } else if (type === 'tabbar') {
-        ncp(p.join(chocolatechipui_path, 'cli-resources', 'jspm',  'tabbar', 'dev'), p.join(path, name, 'dev'), noop);
-        ncp(p.join(chocolatechipui_path, 'cli-resources', 'jspm',  'tabbar', 'images'), p.join(path, name, 'images'), noop);
-        cpFile(p.join(chocolatechipui_path, 'cli-resources', 'jspm',  'tabbar', 'css', 'app.css'), p.join(path, name, 'css', 'app.css'), noop);
-        cpFile(p.join(chocolatechipui_path, 'cli-resources', 'jspm',  'tabbar', 'index.html'), p.join(path, name, 'index.html'), noop);
-
-      } else {
-        ncp(p.join(chocolatechipui_path, 'cli-resources', 'jspm',  'basic', 'dev'), p.join(path, name, 'dev'), noop);
-        cpFile(p.join(chocolatechipui_path, 'cli-resources', 'jspm',  'basic', 'index.html'), p.join(path, name, 'index.html'), noop);
-
-      }
-      setTimeout(function() {
-        replace({
-          replace: /CHUI_APP_NAME/g,
-          with: name,
-          files: [
-            p.join(path, name, 'index.html'),
-            p.join(path, name, 'package.json')
-          ],
-        });
-        replace({
-          replace: /CHUI_OS_THEME/g,
-          with: os,
-          files: [
-            p.join(path, name, 'index.html'),
-          ],
-        });
-      }, 380);
-
-      return;
+    if (box) {
+      cpFile(p.join(chocolatechipui_path, 'dist', 'chui-box.min.js'), p.join(path, name, 'js', 'chui-box.min.js'), noop);
+      cpFile(p.join(chocolatechipui_path, 'dist', 'chui-box.min.js.map'), p.join(path, name, 'js', 'chui-box.min.js.map'), noop);
 
     } else {
-      console.log('You can double click this app to launch it.');
-
-      ncp.limit = 16;
-      mkdirp(p.join(path, name), noop);
-      mkdirp(p.join(path, name, 'js'), noop);
-      mkdirp(p.join(path, name, 'css'), noop);
-      ncp(p.join(chocolatechipui_path, 'dist', 'css'), p.join(path, name, 'css'), noop);
-
       cpFile(p.join(chocolatechipui_path, 'dist', 'chui.min.js'), p.join(path, name, 'js', 'chui.min.js'), noop);
       cpFile(p.join(chocolatechipui_path, 'dist', 'chui.min.js.map'), p.join(path, name, 'js', 'chui.min.js.map'), noop);
 
+    }
 
-      if (type && (type === 'navigation') || (type === 'n')) {
-        ncp(p.join(chocolatechipui_path, 'cli-resources', 'for-desktop',  'chui-navigation', 'js'), p.join(path, name, 'js'), noop);
-        ncp(p.join(chocolatechipui_path, 'cli-resources', 'for-desktop',  'chui-navigation', 'css'), p.join(path, name, 'css'), noop);
-        cpFile(p.join(chocolatechipui_path, 'cli-resources', 'for-desktop',  'chui-navigation', 'index.html'), p.join(path, name, 'index.html'), noop);
-        
-      } else if (type && (type === 'tabbar') || (type === 't')) {
-        ncp(p.join(chocolatechipui_path, 'cli-resources', 'for-desktop',  'chui-tabbar', 'js'), p.join(path, name, 'js'), noop);
-        ncp(p.join(chocolatechipui_path, 'cli-resources', 'for-desktop',  'chui-tabbar', 'css'), p.join(path, name, 'css'), noop);
-        ncp(p.join(chocolatechipui_path, 'cli-resources', 'for-desktop',  'chui-tabbar', 'images'), p.join(path, name, 'images'), noop);
-        cpFile(p.join(chocolatechipui_path, 'cli-resources', 'for-desktop',  'chui-tabbar', 'index.html'), p.join(path, name, 'index.html'), noop);
+    if (type === 'navigation') {
+      ncp(p.join(chocolatechipui_path, 'cli-resources', 'jspm',  'navigation', 'dev'), p.join(path, name, 'dev'), noop);
+      cpFile(p.join(chocolatechipui_path, 'cli-resources', 'jspm',  'navigation', 'index.html'), p.join(path, name, 'index.html'), noop);
 
-      } else if (type && (type === 'slideout') || (type === 's')) {
-        ncp(p.join(chocolatechipui_path, 'cli-resources', 'for-desktop',  'chui-slideout', 'js'), p.join(path, name, 'js'), noop);
-        ncp(p.join(chocolatechipui_path, 'cli-resources', 'for-desktop',  'chui-slideout', 'css'), p.join(path, name, 'css'), noop);
-        cpFile(p.join(chocolatechipui_path, 'cli-resources', 'for-desktop',  'chui-slideout', 'index.html'), p.join(path, name, 'index.html'), noop);
+    } else if (type === 'slideout') {
+      ncp(p.join(chocolatechipui_path, 'cli-resources', 'jspm',  'slideout', 'dev'), p.join(path, name, 'dev'), noop);
+      cpFile(p.join(chocolatechipui_path, 'cli-resources', 'jspm',  'slideout', 'index.html'), p.join(path, name, 'index.html'), noop);
 
-      } else {
-        ncp(p.join(chocolatechipui_path, 'cli-resources', 'for-desktop',  'chui-basic', 'js'), p.join(path, name, 'js'), noop);
-        ncp(p.join(chocolatechipui_path, 'cli-resources', 'for-desktop',  'chui-basic', 'css'), p.join(path, name, 'css'), noop);
-        cpFile(p.join(chocolatechipui_path, 'cli-resources', 'for-desktop',  'chui-basic', 'index.html'), p.join(path, name, 'index.html'), noop);
-      }
+    } else if (type === 'tabbar') {
+      ncp(p.join(chocolatechipui_path, 'cli-resources', 'jspm',  'tabbar', 'dev'), p.join(path, name, 'dev'), noop);
+      ncp(p.join(chocolatechipui_path, 'cli-resources', 'jspm',  'tabbar', 'images'), p.join(path, name, 'images'), noop);
+      cpFile(p.join(chocolatechipui_path, 'cli-resources', 'jspm',  'tabbar', 'css', 'app.css'), p.join(path, name, 'css', 'app.css'), noop);
+      cpFile(p.join(chocolatechipui_path, 'cli-resources', 'jspm',  'tabbar', 'index.html'), p.join(path, name, 'index.html'), noop);
+
+    } else {
+      ncp(p.join(chocolatechipui_path, 'cli-resources', 'jspm',  'basic', 'dev'), p.join(path, name, 'dev'), noop);
+      cpFile(p.join(chocolatechipui_path, 'cli-resources', 'jspm',  'basic', 'index.html'), p.join(path, name, 'index.html'), noop);
+
     }
     setTimeout(function() {
       replace({
@@ -389,6 +352,7 @@ if (chui_examples) {
         with: name,
         files: [
           p.join(path, name, 'index.html'),
+          p.join(path, name, 'package.json')
         ],
       });
       replace({
@@ -399,7 +363,61 @@ if (chui_examples) {
         ],
       });
     }, 380);
+
+    return;
+
+  } else {
+    console.log('You can double click this app to launch it.');
+
+    ncp.limit = 16;
+    mkdirp(p.join(path, name), noop);
+    mkdirp(p.join(path, name, 'js'), noop);
+    mkdirp(p.join(path, name, 'css'), noop);
+    ncp(p.join(chocolatechipui_path, 'dist', 'css'), p.join(path, name, 'css'), noop);
+
+    cpFile(p.join(chocolatechipui_path, 'dist', 'chui.min.js'), p.join(path, name, 'js', 'chui.min.js'), noop);
+    cpFile(p.join(chocolatechipui_path, 'dist', 'chui.min.js.map'), p.join(path, name, 'js', 'chui.min.js.map'), noop);
+
+
+    if (type && (type === 'navigation') || (type === 'n')) {
+      ncp(p.join(chocolatechipui_path, 'cli-resources', 'for-desktop',  'chui-navigation', 'js'), p.join(path, name, 'js'), noop);
+      ncp(p.join(chocolatechipui_path, 'cli-resources', 'for-desktop',  'chui-navigation', 'css'), p.join(path, name, 'css'), noop);
+      cpFile(p.join(chocolatechipui_path, 'cli-resources', 'for-desktop',  'chui-navigation', 'index.html'), p.join(path, name, 'index.html'), noop);
+      
+    } else if (type && (type === 'tabbar') || (type === 't')) {
+      ncp(p.join(chocolatechipui_path, 'cli-resources', 'for-desktop',  'chui-tabbar', 'js'), p.join(path, name, 'js'), noop);
+      ncp(p.join(chocolatechipui_path, 'cli-resources', 'for-desktop',  'chui-tabbar', 'css'), p.join(path, name, 'css'), noop);
+      ncp(p.join(chocolatechipui_path, 'cli-resources', 'for-desktop',  'chui-tabbar', 'images'), p.join(path, name, 'images'), noop);
+      cpFile(p.join(chocolatechipui_path, 'cli-resources', 'for-desktop',  'chui-tabbar', 'index.html'), p.join(path, name, 'index.html'), noop);
+
+    } else if (type && (type === 'slideout') || (type === 's')) {
+      ncp(p.join(chocolatechipui_path, 'cli-resources', 'for-desktop',  'chui-slideout', 'js'), p.join(path, name, 'js'), noop);
+      ncp(p.join(chocolatechipui_path, 'cli-resources', 'for-desktop',  'chui-slideout', 'css'), p.join(path, name, 'css'), noop);
+      cpFile(p.join(chocolatechipui_path, 'cli-resources', 'for-desktop',  'chui-slideout', 'index.html'), p.join(path, name, 'index.html'), noop);
+
+    } else {
+      ncp(p.join(chocolatechipui_path, 'cli-resources', 'for-desktop',  'chui-basic', 'js'), p.join(path, name, 'js'), noop);
+      ncp(p.join(chocolatechipui_path, 'cli-resources', 'for-desktop',  'chui-basic', 'css'), p.join(path, name, 'css'), noop);
+      cpFile(p.join(chocolatechipui_path, 'cli-resources', 'for-desktop',  'chui-basic', 'index.html'), p.join(path, name, 'index.html'), noop);
+    }
   }
+  setTimeout(function() {
+    replace({
+      replace: /CHUI_APP_NAME/g,
+      with: name,
+      files: [
+        p.join(path, name, 'index.html'),
+      ],
+    });
+    replace({
+      replace: /CHUI_OS_THEME/g,
+      with: os,
+      files: [
+        p.join(path, name, 'index.html'),
+      ],
+    });
+  }, 380);
+
 
 /**
  * No arguments used. Print help:

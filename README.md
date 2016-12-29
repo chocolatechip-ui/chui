@@ -91,6 +91,15 @@ Running gulp will build and launch your project in your default browser. It will
 
 When you create a new project for ES6, you'll find all your development code in the project's `dev` folder. When you run `gulp`, it takes those files and compiles them into ES5 and puts them in the `js` folder, which your project loads.
 
+##TypeScript support
+
+You can get TypeScript support for either a simple JavaScript project or a JSPM project with the flag `--ts`. This will put a folder called `typings` at the root of your project, along with a filed called `jsconfig.json`. Editors and IDEs that have plugins or extensions to support TypeScript will be able to use the TypeScript declaration file to add intellisense to your code. This provides code hints, code completion and code lookups as you type or hover over ChocolateChip-UI code.
+
+Editors that support TypeScript intellisense for JavaScript:
+
+1. [Visual Studio Code](http://code.visualstudio.com) - Free on Mac, Windows and Linux.
+2. [WebStorm](https://www.jetbrains.com/webstorm/) - Commercial on Mac, Windows and Linux.
+
 ##Hybrid Apps
 
 Chui can also convert your completed app into a hybrid app for Android and iOS. It does this by create a simple webview shell that loads your web app. This allows your to open your Android project in Android Studio and your iOS porject in Xcode. You can then build and test these on the respective emulator/simulator or load them directly on tethered devices. When you're satisfied with the performance of your app, you can then submit it for review on Android Play or the Apple App Store.
