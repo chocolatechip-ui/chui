@@ -249,6 +249,21 @@ if (chui_examples) {
     cpFile(p.join(chocolatechipui_path, 'dist', 'chui.min.js'), p.join(homedir, 'Desktop', 'Chui Reference Apps', 'basic', 'Vino', 'js', 'chui.min.js'), noop);
     cpFile(p.join(chocolatechipui_path, 'dist', 'chui.min.js.map'), p.join(homedir, 'Desktop', 'Chui Reference Apps', 'basic', 'Vino', 'js', 'chui.min.js.map'), noop);
 
+    if (typings) {
+
+      ncp(p.join(chocolatechipui_path, 'typings'), p.join(homedir, 'Desktop', 'Chui Reference Apps', 'basic', 'Fragranž', 'typings'), noop);
+      writefile(p.join(homedir, 'Desktop', 'Chui Reference Apps', 'basic', 'Fragranž', 'jsconfig.json'), jsconfig, noop);
+      
+      ncp(p.join(chocolatechipui_path, 'typings'), p.join(homedir, 'Desktop', 'Chui Reference Apps', 'basic', 'SFCoffee', 'typings'), noop);
+      writefile(p.join(homedir, 'Desktop', 'Chui Reference Apps', 'basic', 'SFCoffee', 'jsconfig.json'), jsconfig, noop);
+
+      ncp(p.join(chocolatechipui_path, 'typings'), p.join(homedir, 'Desktop', 'Chui Reference Apps', 'basic', 'TodoMVC', 'typings'), noop);
+      writefile(p.join(homedir, 'Desktop', 'Chui Reference Apps', 'basic', 'TodoMVC', 'jsconfig.json'), jsconfig, noop);
+      
+      ncp(p.join(chocolatechipui_path, 'typings'), p.join(homedir, 'Desktop', 'Chui Reference Apps', 'basic', 'Vino', 'typings'), noop);
+      writefile(p.join(homedir, 'Desktop', 'Chui Reference Apps', 'basic', 'Vino', 'jsconfig.json'), jsconfig, noop);
+    }
+
 
     /**
      * Copy JSPM apps:
@@ -269,6 +284,21 @@ if (chui_examples) {
     ncp(p.join(chocolatechipui_path, 'dist', 'css'), p.join(homedir, 'Desktop', 'Chui Reference Apps', 'jspm', 'Vino', 'css'), noop);
     cpFile(p.join(chocolatechipui_path, 'dist', 'chui.min.js'), p.join(homedir, 'Desktop', 'Chui Reference Apps', 'jspm', 'Vino', 'js', 'chui.min.js'), noop);
     cpFile(p.join(chocolatechipui_path, 'dist', 'chui.min.js.map'), p.join(homedir, 'Desktop', 'Chui Reference Apps', 'jspm', 'Vino', 'js', 'chui.min.js.map'), noop);
+    
+    if (typings) {
+
+      ncp(p.join(chocolatechipui_path, 'typings'), p.join(homedir, 'Desktop', 'Chui Reference Apps', 'jspm', 'Fragranž', 'typings'), noop);
+      writefile(p.join(homedir, 'Desktop', 'Chui Reference Apps', 'jspm', 'Fragranž', 'jsconfig.json'), jsconfig, noop);
+      
+      ncp(p.join(chocolatechipui_path, 'typings'), p.join(homedir, 'Desktop', 'Chui Reference Apps', 'jspm', 'SFCoffee', 'typings'), noop);
+      writefile(p.join(homedir, 'Desktop', 'Chui Reference Apps', 'jspm', 'SFCoffee', 'jsconfig.json'), jsconfig, noop);
+      
+      ncp(p.join(chocolatechipui_path, 'typings'), p.join(homedir, 'Desktop', 'Chui Reference Apps', 'jspm', 'TodoMVC', 'typings'), noop);
+      writefile(p.join(homedir, 'Desktop', 'Chui Reference Apps', 'jspm', 'TodoMVC', 'jsconfig.json'), jsconfig, noop);
+      
+      ncp(p.join(chocolatechipui_path, 'typings'), p.join(homedir, 'Desktop', 'Chui Reference Apps', 'jspm', 'Vino', 'typings'), noop);
+      writefile(p.join(homedir, 'Desktop', 'Chui Reference Apps', 'jspm', 'Vino', 'jsconfig.json'), jsconfig, noop);
+    }
     
   }, 100)
 } else if (hybrid && (name && name !== true)) {
