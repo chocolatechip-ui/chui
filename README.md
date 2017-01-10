@@ -16,6 +16,10 @@ Just run (depending on your setup, you may need to run it with `sudo`):
 npm i -g chui
 ```
 
+##Updating
+
+`chui` is dependent on `chocolatechipui` for its resources. Since we update `chocolatechipui` frequently, it's a go idea to run `npm update` at least once a week. This will pull down the latest version for `chui` to use.
+
 ##Creating Projects
 
 `Chui` helps you quickly create a ChocolateChip-UI project. There are two types of projects: 

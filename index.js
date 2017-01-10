@@ -1,40 +1,40 @@
 #!/usr/bin/env node
-var fs = require('fs');
-var mkdirp = require('mkdirp');
-var writefile = require('writefile');
-var cpFile = require('cp-file');
-var ncp = require('ncp').ncp;
-var cp = require('fs-cp');
-var p = require("path");
-var argv = require('yargs').argv;
-var iosTemplates = require('./ios/templates.js');
-var android = require('./android/templates/android.js');
-var gradle = require('./android/templates/gradle.js');
-var OS = require("os");
-var replace = require('replace-in-file');
-var name = argv.name || argv.n;
-var homedir = (process.platform === "win32") ? process.env.HOMEPATH : process.env.HOME;
-var user = (process.platform === "win32") ? process.env.USERNAME : process.env.USER;
-var os = argv.os || argv.o || 'ios';
+const fs = require('fs');
+const mkdirp = require('mkdirp');
+const writefile = require('writefile');
+const cpFile = require('cp-file');
+const ncp = require('ncp').ncp;
+const cp = require('fs-cp');
+const p = require("path");
+const argv = require('yargs').argv;
+const iosTemplates = require('./ios/templates.js');
+const android = require('./android/templates/android.js');
+const gradle = require('./android/templates/gradle.js');
+const OS = require("os");
+const replace = require('replace-in-file');
+const name = argv.name || argv.n;
+const homedir = (process.platform === "win32") ? process.env.HOMEPATH : process.env.HOME;
+const user = (process.platform === "win32") ? process.env.USERNAME : process.env.USER;
+let os = argv.os || argv.o || 'ios';
 os = os.toLowerCase();
-var pkg = require('./package.json');
-var type = argv.type || argv.t;
-var hybrid = argv.hybrid || argv.h;
-var path = argv.path || argv.p || p.join(homedir, 'Desktop');
+const pkg = require('./package.json');
+const type = argv.type || argv.t;
+const hybrid = argv.hybrid || argv.h;
+const path = argv.path || argv.p || p.join(homedir, 'Desktop');
 if (name) {
   var appPath = p.join(homedir, 'Desktop', name);
 }
-var browsersync = argv.browsersync || argv.b;
-var jspm = argv.jspm || argv.j;
-var box = argv.box || argv.b
-var chui_examples = argv.examples || argv.e;
-var reference_apps = argv.refapps || argv.r;
-var icons = argv.icons || argv.i || false;
-var website = argv.website || argv.w;
+const browsersync = argv.browsersync || argv.b;
+const jspm = argv.jspm || argv.j;
+const box = argv.box || argv.b
+const chui_examples = argv.examples || argv.e;
+const reference_apps = argv.refapps || argv.r;
+const icons = argv.icons || argv.i || false;
+const website = argv.website || argv.w;
 
-var typings = argv.ts;
+const typings = argv.ts;
 
-var jsconfig = '{\n\
+const jsconfig = '{\n\
   "compilerOptions": {\n\
       "target": "ES6"\n\
   },\n\
@@ -44,16 +44,14 @@ var jsconfig = '{\n\
   ]\n\
 }';
 
-var noop = function() {};
-
-var user = (process.platform === "win32") ? process.env.USERNAME : process.env.USER;
+const noop = function() {};
 
 var chocolatechipui_path = p.join(__dirname, 'node_modules', 'chocolatechipui');
 
 /**
  * Define function to create Xcode project:
  */
-var createiOSProject = function() {
+const createiOSProject = () => {
   console.log('Creating an Xcode project.');
   mkdirp(appPath);
   mkdirp(p.join(appPath, name + '.xcodeproj'));
@@ -81,7 +79,7 @@ var createiOSProject = function() {
   } else {
     ncp(p.join(__dirname, 'ios', 'icons'), p.join(appPath, name, 'Assets.xcassets'));
   }
-  
+
   /**
    * Write JSON files for icons and launch images:
    */
@@ -121,7 +119,7 @@ var createiOSProject = function() {
   if (website) {
     ncp.limit = 16;
     ncp(website, p.join(appPath, 'Website'), noop);
-  } 
+  }
 
   /**
    * Xcode project is complete:
@@ -132,7 +130,7 @@ var createiOSProject = function() {
 /**
  * Define function to create Andtroid Studio project:
  */
-function createAndroidProject() {
+const createAndroidProject = () => {
   console.log('creating and android app');
 
   /**
@@ -236,7 +234,7 @@ if (chui_examples) {
     ncp(p.join(chocolatechipui_path, 'dist', 'css'), p.join(homedir, 'Desktop', 'Chui Reference Apps', 'basic', 'Fragranž', 'css'), noop);
     cpFile(p.join(chocolatechipui_path, 'dist', 'chui.min.js'), p.join(homedir, 'Desktop', 'Chui Reference Apps', 'basic', 'Fragranž', 'js', 'chui.min.js'), noop);
     cpFile(p.join(chocolatechipui_path, 'dist', 'chui.min.js.map'), p.join(homedir, 'Desktop', 'Chui Reference Apps', 'basic', 'Fragranž', 'js', 'chui.min.js.map'), noop);
-    
+
     ncp(p.join(chocolatechipui_path, 'dist', 'css'), p.join(homedir, 'Desktop', 'Chui Reference Apps', 'basic', 'SFCoffee', 'css'), noop);
     cpFile(p.join(chocolatechipui_path, 'dist', 'chui.min.js'), p.join(homedir, 'Desktop', 'Chui Reference Apps', 'basic', 'SFCoffee', 'js', 'chui.min.js'), noop);
     cpFile(p.join(chocolatechipui_path, 'dist', 'chui.min.js.map'), p.join(homedir, 'Desktop', 'Chui Reference Apps', 'basic', 'SFCoffee', 'js', 'chui.min.js.map'), noop);
@@ -253,13 +251,13 @@ if (chui_examples) {
 
       ncp(p.join(chocolatechipui_path, 'typings'), p.join(homedir, 'Desktop', 'Chui Reference Apps', 'basic', 'Fragranž', 'typings'), noop);
       writefile(p.join(homedir, 'Desktop', 'Chui Reference Apps', 'basic', 'Fragranž', 'jsconfig.json'), jsconfig, noop);
-      
+
       ncp(p.join(chocolatechipui_path, 'typings'), p.join(homedir, 'Desktop', 'Chui Reference Apps', 'basic', 'SFCoffee', 'typings'), noop);
       writefile(p.join(homedir, 'Desktop', 'Chui Reference Apps', 'basic', 'SFCoffee', 'jsconfig.json'), jsconfig, noop);
 
       ncp(p.join(chocolatechipui_path, 'typings'), p.join(homedir, 'Desktop', 'Chui Reference Apps', 'basic', 'TodoMVC', 'typings'), noop);
       writefile(p.join(homedir, 'Desktop', 'Chui Reference Apps', 'basic', 'TodoMVC', 'jsconfig.json'), jsconfig, noop);
-      
+
       ncp(p.join(chocolatechipui_path, 'typings'), p.join(homedir, 'Desktop', 'Chui Reference Apps', 'basic', 'Vino', 'typings'), noop);
       writefile(p.join(homedir, 'Desktop', 'Chui Reference Apps', 'basic', 'Vino', 'jsconfig.json'), jsconfig, noop);
     }
@@ -271,7 +269,7 @@ if (chui_examples) {
     ncp(p.join(chocolatechipui_path, 'dist', 'css'), p.join(homedir, 'Desktop', 'Chui Reference Apps', 'jspm', 'Fragranž', 'css'), noop);
     cpFile(p.join(chocolatechipui_path, 'dist', 'chui.min.js'), p.join(homedir, 'Desktop', 'Chui Reference Apps', 'jspm', 'Fragranž', 'js', 'chui.min.js'), noop);
     cpFile(p.join(chocolatechipui_path, 'dist', 'chui.min.js.map'), p.join(homedir, 'Desktop', 'Chui Reference Apps', 'jspm', 'Fragranž', 'js', 'chui.min.js.map'), noop);
-    
+
 
     ncp(p.join(chocolatechipui_path, 'dist', 'css'), p.join(homedir, 'Desktop', 'Chui Reference Apps', 'jspm', 'SFCoffee', 'css'), noop);
     cpFile(p.join(chocolatechipui_path, 'dist', 'chui.min.js'), p.join(homedir, 'Desktop', 'Chui Reference Apps', 'jspm', 'SFCoffee', 'js', 'chui.min.js'), noop);
@@ -284,22 +282,22 @@ if (chui_examples) {
     ncp(p.join(chocolatechipui_path, 'dist', 'css'), p.join(homedir, 'Desktop', 'Chui Reference Apps', 'jspm', 'Vino', 'css'), noop);
     cpFile(p.join(chocolatechipui_path, 'dist', 'chui.min.js'), p.join(homedir, 'Desktop', 'Chui Reference Apps', 'jspm', 'Vino', 'js', 'chui.min.js'), noop);
     cpFile(p.join(chocolatechipui_path, 'dist', 'chui.min.js.map'), p.join(homedir, 'Desktop', 'Chui Reference Apps', 'jspm', 'Vino', 'js', 'chui.min.js.map'), noop);
-    
+
     if (typings) {
 
       ncp(p.join(chocolatechipui_path, 'typings'), p.join(homedir, 'Desktop', 'Chui Reference Apps', 'jspm', 'Fragranž', 'typings'), noop);
       writefile(p.join(homedir, 'Desktop', 'Chui Reference Apps', 'jspm', 'Fragranž', 'jsconfig.json'), jsconfig, noop);
-      
+
       ncp(p.join(chocolatechipui_path, 'typings'), p.join(homedir, 'Desktop', 'Chui Reference Apps', 'jspm', 'SFCoffee', 'typings'), noop);
       writefile(p.join(homedir, 'Desktop', 'Chui Reference Apps', 'jspm', 'SFCoffee', 'jsconfig.json'), jsconfig, noop);
-      
+
       ncp(p.join(chocolatechipui_path, 'typings'), p.join(homedir, 'Desktop', 'Chui Reference Apps', 'jspm', 'TodoMVC', 'typings'), noop);
       writefile(p.join(homedir, 'Desktop', 'Chui Reference Apps', 'jspm', 'TodoMVC', 'jsconfig.json'), jsconfig, noop);
-      
+
       ncp(p.join(chocolatechipui_path, 'typings'), p.join(homedir, 'Desktop', 'Chui Reference Apps', 'jspm', 'Vino', 'typings'), noop);
       writefile(p.join(homedir, 'Desktop', 'Chui Reference Apps', 'jspm', 'Vino', 'jsconfig.json'), jsconfig, noop);
     }
-    
+
   }, 100)
 } else if (hybrid && (name && name !== true)) {
   ncp.limit = 16;
@@ -413,7 +411,7 @@ if (chui_examples) {
       ncp(p.join(chocolatechipui_path, 'cli-resources', 'for-desktop',  'chui-navigation', 'js'), p.join(path, name, 'js'), noop);
       ncp(p.join(chocolatechipui_path, 'cli-resources', 'for-desktop',  'chui-navigation', 'css'), p.join(path, name, 'css'), noop);
       cpFile(p.join(chocolatechipui_path, 'cli-resources', 'for-desktop',  'chui-navigation', 'index.html'), p.join(path, name, 'index.html'), noop);
-      
+
     } else if (type && (type === 'tabbar') || (type === 't')) {
       ncp(p.join(chocolatechipui_path, 'cli-resources', 'for-desktop',  'chui-tabbar', 'js'), p.join(path, name, 'js'), noop);
       ncp(p.join(chocolatechipui_path, 'cli-resources', 'for-desktop',  'chui-tabbar', 'css'), p.join(path, name, 'css'), noop);
