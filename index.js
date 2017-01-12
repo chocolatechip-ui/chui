@@ -16,7 +16,7 @@ const user = (process.platform === "win32") ? process.env.USERNAME : process.env
 const pkg = require('./package.json');
 const argv = require('yargs').argv;
 
-module.exports = ((argv) => {
+const chui = (() => {
   /**
    * Create variables based on commandline arguments
    */
@@ -466,6 +466,7 @@ module.exports = ((argv) => {
   };
 
   /**
+   * Core functionality based on user arguments.
    * Test arguments to determine what to do:
    */
   if (chui_examples) {

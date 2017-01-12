@@ -12,13 +12,19 @@ For iOS, ChocolateChip-UI supports versions 9 and 10 using Swift 3 and WkWebView
 
 Just run (depending on your setup, you may need to run it with `sudo`):
 
-```
-npm i -g chui
-```
+
+    npm i -g chui
+
 
 ##Updating
 
 `chui` is dependent on `chocolatechipui` for its resources. Since we update `chocolatechipui` frequently, it's a go idea to run `npm update` at least once a week. This will pull down the latest version for `chui` to use.
+
+##Testing
+
+You can test this after running `npm i` in this directory. The tests use Mocha and Chai. Because this tool create folders and files on the user's desktop, we do not physically test for those results. Instead we use mocks of internal functions to test the logic used to determine who files should be created. To run the tests:
+
+    npm test
 
 ##Creating Projects
 
@@ -122,7 +128,6 @@ You can learn about how to build apps with ChocolateChip-UI at the website: [cho
 
 If you want to create a project for an earlier version of ChocolateChip-UI (version 3.9.2), use chui 1.2.13:
 
-```
-npm i -g chui@1.2.13
-```
+    npm i -g chui@1.2.13
+
 For documentation for this older version of `chui`, [please read this](https://chocolatechip-ui.github.io/v3/documentation/building.html#chui_project_builder).
