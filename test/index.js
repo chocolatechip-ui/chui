@@ -14,8 +14,8 @@ describe('Tests for package.json:', function() {
     chai.assert.equal(pkg.name, 'chui');
   });
 
-  it('Version should be 2.5.0.', function() {
-    chai.assert.equal(pkg.version, '2.5.0');
+  it('Version should be 2.5.1.', function() {
+    chai.assert.equal(pkg.version, '2.5.1');
   });
 
   it('License should be MIT.', function() {

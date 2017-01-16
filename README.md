@@ -1,5 +1,8 @@
 chui
 =======
+[![npm version](https://badge.fury.io/js/chui.svg)](https://badge.fury.io/js/chui)
+
+[![NPM](https://nodei.co/npm/chui.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/chui/)
 
 - Make mobile web apps
 - Get hard work done fast
