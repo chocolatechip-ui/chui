@@ -85,6 +85,14 @@ const createJSProject = (...args) => {
       results.type = 'basic'
       results.htmlPath = p.join(chocolatechipui_path, 'cli-resources', 'jspm', 'basic', 'index.html').split('chui/test/stubs/')[1];
     }
+
+    /**
+     * Test for custom project
+     */
+    if (args.indexOf('custom') > -1) {
+      results.minChui = p.join(chocolatechipui_path, 'cli-resources', 'jspm', 'dist').split('chui/test/stubs/')[1];
+      results.importableModules = p.join(chocolatechipui_path, 'cli-resources', 'src').split('chui/test/stubs/')[1];
+    }
     
   } else {
     results.jspm = false;

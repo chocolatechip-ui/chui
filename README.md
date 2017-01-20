@@ -104,6 +104,41 @@ Running gulp will build and launch your project in your default browser. It will
 
 When you create a new project for ES6, you'll find all your development code in the project's `dev` folder. When you run `gulp`, it takes those files and compiles them into ES5 and puts them in the `js` folder, which your project loads.
 
+##Custom Build
+
+You can also make a project that has a minimal build of ChocolateChip-UI. This can greatly reduce the size of your app, sometimes by half. This is only possible with ES6 projects since it uses ES6 modules to let you import only the parts you need. To create a custom project, use the `-c` flag:
+
+
+```
+# For Android:
+chui -n myProject -o android -t basic -j -c
+chui -n myProject -o android -t navigation -j -c
+chui -n myProject -o android -t slideout -j -c
+chui -n myProject -o android -t tabbar -j -c
+# Default (basic):
+chui -n myProject -o android -j -c
+```
+
+```
+# For iOS:
+chui -n myProject -o ios -t basic -j -c
+chui -n myProject -o ios -t navigation -j -c
+chui -n myProject -o ios -t slideout -j -c
+chui -n myProject -o ios -t tabbar -j -c
+# Default (basic):
+chui -n myProject -j -c
+```
+
+Creating a custom build puts a folder called `src` in your project's `dev` folder. You can import any other modules you want from that `src` folder:
+
+```
+import './src/switches';
+import './src/range';
+import './src/popup';
+```
+
+Be aware that the path will need to be adjusted depending on where you are importing the module into. You can check out the reference apps to see how this is done. Open the `jspm` folder and examine the files in each project's `dev` folder to see how they import their ChocolateChip-UI modules.
+
 ##TypeScript support
 
 You can get TypeScript support for either a simple JavaScript project or a JSPM project with the flag `--ts`. This will put a folder called `typings` at the root of your project, along with a filed called `jsconfig.json`. Editors and IDEs that have plugins or extensions to support TypeScript will be able to use the TypeScript declaration file to add intellisense to your code. This provides code hints, code completion and code lookups as you type or hover over ChocolateChip-UI code.

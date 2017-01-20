@@ -14,8 +14,8 @@ describe('Tests for package.json:', function() {
     chai.assert.equal(pkg.name, 'chui');
   });
 
-  it('Version should be 2.5.1.', function() {
-    chai.assert.equal(pkg.version, '2.5.1');
+  it('Version should be 2.6.0.', function() {
+    chai.assert.equal(pkg.version, '2.6.0');
   });
 
   it('License should be MIT.', function() {
@@ -133,6 +133,16 @@ To create a project for a specific os, use the -o flag: chui -n myApp -o android
     var results = createJSProject('name=MyApp');
     chai.assert.equal(results.jspm, false);
   });
+
+  it('If name and jspm and custom flag, path to minimal path should be: "node_modules/chocolatechipui/cli-resources/jspm/dist".', function() {
+    const results = createJSProject('name=MyApp', 'jspm', 'custom');
+    chai.assert.equal(results.minChui, 'node_modules/chocolatechipui/cli-resources/jspm/dist')
+  })
+
+  it('If name and jspm and custom flag, path to importable modules should be: "node_modules/chocolatechipui/cli-resources/jspm/dev/src".', function() {
+    const results = createJSProject('name=MyApp', 'jspm', 'custom');
+    chai.assert.equal(results.importableModules, 'node_modules/chocolatechipui/cli-resources/src')
+  })
 
   it('If name and jspm and no type flag, should return basic type for JSPM project.', function() {
     const results = createJSProject('name=MyApp', 'jspm');
