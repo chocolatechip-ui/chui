@@ -375,13 +375,15 @@ const chui = (() => {
         cpFile(p.join(chocolatechipui_path, 'dist', 'chui-box.min.js.map'), p.join(path, name, 'js', 'chui-box.min.js.map'), noop);
 
       } else if (custom) {
-        console.log('Doing the custom thing.')
+        console.log('Creating a custom project.')
         cpFile(p.join(chocolatechipui_path, 'cli-resources', 'jspm', 'dist', 'chui.min.js'), p.join(path, name, 'js', 'chui.min.js'), noop);
         cpFile(p.join(chocolatechipui_path, 'cli-resources', 'jspm', 'dist', 'chui.min.js.map'), p.join(path, name, 'js', 'chui.min.js.map'), noop);
-        ncp(p.join(chocolatechipui_path, 'cli-resources', 'jspm',  'src'), p.join(path, name, 'dev', 'src'), noop);
+        mkdirp(p.join(path, name, 'cli-resources', 'jspm',  'src'), noop)
+        setTimeout(function() {
+          ncp(p.join(chocolatechipui_path, 'cli-resources', 'jspm',  'src'), p.join(path, name, 'dev', 'src'), noop);
+        }, 200);
 
       } else {
-        console.log('Doing the normal thing here.')
         cpFile(p.join(chocolatechipui_path, 'dist', 'chui.min.js'), p.join(path, name, 'js', 'chui.min.js'), noop);
         cpFile(p.join(chocolatechipui_path, 'dist', 'chui.min.js.map'), p.join(path, name, 'js', 'chui.min.js.map'), noop);
       }
