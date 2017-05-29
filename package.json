@@ -1,6 +1,6 @@
 {
   "name": "chui",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "description": "A module for creating Web apps with ChocolateChip-UI",
   "main": "index.js",
   "bin": {
@@ -28,6 +28,7 @@
   "dependencies": {
     "chai": "^3.5.0",
     "chocolatechipui": "^5.0.0",
+    "copy": "^0.3.0",
     "cp-file": "^3.2.0",
     "cpr": "^2.0.0",
     "fs-cp": "^1.3.0",
@@ -40,8 +41,5 @@
   },
   "scripts": {
     "test": "mocha"
-  },
-  "devDependencies": {
-    "copy": "^0.3.0"
   }
 }
