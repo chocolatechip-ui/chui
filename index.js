@@ -5,6 +5,7 @@ const writefile = require('writefile');
 const cpFile = require('cp-file');
 const ncp = require('ncp').ncp;
 const cp = require('fs-cp');
+const copy = require('copy');
 const p = require("path");
 const iosTemplates = require('./ios/templates.js');
 const android = require('./android/templates/android.js');
@@ -30,8 +31,6 @@ const chui = (() => {
     var appPath = p.join(homedir, 'Desktop', name);
   }
   const browsersync = argv.browsersync || argv.b;
-  const jspm = argv.jspm || argv.j;
-  const box = argv.box || argv.b;
   const chui_examples = argv.examples || argv.e;
   const reference_apps = argv.refapps || argv.r;
   const icons = argv.icons || argv.i || false;
@@ -41,15 +40,7 @@ const chui = (() => {
 
   const noop = function() {};
   const chocolatechipui_path = p.join(__dirname, 'node_modules', 'chocolatechipui');
-  const jsconfig = '{\n\
-    "compilerOptions": {\n\
-        "target": "ES6"\n\
-    },\n\
-    "exclude": [\n\
-        "node_modules",\n\
-        "jspm_modules"\n\
-    ]\n\
-  }';
+
 
   /**
    * Create iOS project for Xcode 
@@ -129,7 +120,7 @@ const chui = (() => {
      */
     console.log('The project was successfully created. You may now open it in Xcode.');
   };
-
+  
   /**
    * Create Android project for Android Studio 
    */
@@ -168,7 +159,6 @@ const chui = (() => {
       * Android Manifest:
       */
      writefile(p.join(appPath, 'app', 'src', 'main', 'AndroidManifest.xml'), android.android_manifest, noop);
-
 
      /**
       * Create "MainActivity" file:
@@ -214,15 +204,11 @@ const chui = (() => {
    */
   const outputExamples = () => {
     console.log('Outputting ChUI examples to desktop.');
-    mkdirp(p.join(homedir, 'Desktop', 'Chui Examples', 'examples'), noop);
-    mkdirp(p.join(homedir, 'Desktop', 'Chui Examples', 'dist'), noop);
+    mkdirp(p.join(homedir, 'Desktop', 'ChUI Examples'), noop);
     ncp.limit = 16;
     setTimeout(function() {
-      ncp(p.join(chocolatechipui_path, 'examples'), p.join(p.join(homedir, 'Desktop'), 'Chui Examples', 'examples'), noop);
-      ncp(p.join(chocolatechipui_path, 'dist'), p.join(p.join(homedir, 'Desktop'), 'Chui Examples', 'dist'), noop);
-
-
-    }, 20);
+      ncp(p.join(chocolatechipui_path, 'examples'), p.join(p.join(homedir, 'Desktop'), 'Chui Examples'), noop);
+    }, 200);
   };
 
   /**
@@ -232,198 +218,68 @@ const chui = (() => {
     console.log('Outputting ChUI reference apps.');
     ncp(p.join(chocolatechipui_path, 'reference-apps'), p.join(p.join(homedir, 'Desktop'), 'Chui Reference Apps'), noop);
 
-    setTimeout(function(){
-      // Copy Basic Apps:
-      ncp(p.join(chocolatechipui_path, 'dist', 'css'), p.join(homedir, 'Desktop', 'Chui Reference Apps', 'basic', 'Fragranž', 'css'), noop);
-      cpFile(p.join(chocolatechipui_path, 'dist', 'chui.min.js'), p.join(homedir, 'Desktop', 'Chui Reference Apps', 'basic', 'Fragranž', 'js', 'chui.min.js'), noop);
-      cpFile(p.join(chocolatechipui_path, 'dist', 'chui.min.js.map'), p.join(homedir, 'Desktop', 'Chui Reference Apps', 'basic', 'Fragranž', 'js', 'chui.min.js.map'), noop);
-
-      ncp(p.join(chocolatechipui_path, 'dist', 'css'), p.join(homedir, 'Desktop', 'Chui Reference Apps', 'basic', 'SFCoffee', 'css'), noop);
-      cpFile(p.join(chocolatechipui_path, 'dist', 'chui.min.js'), p.join(homedir, 'Desktop', 'Chui Reference Apps', 'basic', 'SFCoffee', 'js', 'chui.min.js'), noop);
-      cpFile(p.join(chocolatechipui_path, 'dist', 'chui.min.js.map'), p.join(homedir, 'Desktop', 'Chui Reference Apps', 'basic', 'SFCoffee', 'js', 'chui.min.js.map'), noop);
-
-      ncp(p.join(chocolatechipui_path, 'dist', 'css'), p.join(homedir, 'Desktop', 'Chui Reference Apps', 'basic', 'TodoMVC', 'css'), noop);
-      cpFile(p.join(chocolatechipui_path, 'dist', 'chui-box.min.js'), p.join(homedir, 'Desktop', 'Chui Reference Apps', 'basic', 'TodoMVC', 'js', 'chui-box.min.js'), noop);
-      cpFile(p.join(chocolatechipui_path, 'dist', 'chui-box.min.js.map'), p.join(homedir, 'Desktop', 'Chui Reference Apps', 'basic', 'TodoMVC', 'js', 'chui-box.min.js.map'), noop);
-
-      ncp(p.join(chocolatechipui_path, 'dist', 'css'), p.join(homedir, 'Desktop', 'Chui Reference Apps', 'basic', 'Vino', 'css'), noop);
-      cpFile(p.join(chocolatechipui_path, 'dist', 'chui.min.js'), p.join(homedir, 'Desktop', 'Chui Reference Apps', 'basic', 'Vino', 'js', 'chui.min.js'), noop);
-      cpFile(p.join(chocolatechipui_path, 'dist', 'chui.min.js.map'), p.join(homedir, 'Desktop', 'Chui Reference Apps', 'basic', 'Vino', 'js', 'chui.min.js.map'), noop);
-
-      if (typings) {
-
-        ncp(p.join(chocolatechipui_path, 'typings'), p.join(homedir, 'Desktop', 'Chui Reference Apps', 'basic', 'Fragranž', 'typings'), noop);
-        writefile(p.join(homedir, 'Desktop', 'Chui Reference Apps', 'basic', 'Fragranž', 'jsconfig.json'), jsconfig, noop);
-
-        ncp(p.join(chocolatechipui_path, 'typings'), p.join(homedir, 'Desktop', 'Chui Reference Apps', 'basic', 'SFCoffee', 'typings'), noop);
-        writefile(p.join(homedir, 'Desktop', 'Chui Reference Apps', 'basic', 'SFCoffee', 'jsconfig.json'), jsconfig, noop);
-
-        ncp(p.join(chocolatechipui_path, 'typings'), p.join(homedir, 'Desktop', 'Chui Reference Apps', 'basic', 'TodoMVC', 'typings'), noop);
-        writefile(p.join(homedir, 'Desktop', 'Chui Reference Apps', 'basic', 'TodoMVC', 'jsconfig.json'), jsconfig, noop);
-
-        ncp(p.join(chocolatechipui_path, 'typings'), p.join(homedir, 'Desktop', 'Chui Reference Apps', 'basic', 'Vino', 'typings'), noop);
-        writefile(p.join(homedir, 'Desktop', 'Chui Reference Apps', 'basic', 'Vino', 'jsconfig.json'), jsconfig, noop);
-      }
-
-
-      /**
-       * Copy JSPM apps:
-       */
-      ncp(p.join(chocolatechipui_path, 'dist', 'css'), p.join(homedir, 'Desktop', 'Chui Reference Apps', 'jspm', 'Fragranž', 'css'), noop);
-      cpFile(p.join(chocolatechipui_path, 'cli-resources', 'jspm', 'dist', 'chui.min.js'), p.join(homedir, 'Desktop', 'Chui Reference Apps', 'jspm', 'Fragranž', 'js', 'chui.min.js'), noop);
-      cpFile(p.join(chocolatechipui_path, 'cli-resources', 'jspm', 'dist', 'chui.min.js.map'), p.join(homedir, 'Desktop', 'Chui Reference Apps', 'jspm', 'Fragranž', 'js', 'chui.min.js.map'), noop);
-      ncp(p.join(chocolatechipui_path, 'cli-resources', 'jspm',  'src'), p.join(homedir, 'Desktop', 'Chui Reference Apps', 'jspm', 'Fragranž', 'dev', 'src'), noop);
-
-
-      ncp(p.join(chocolatechipui_path, 'dist', 'css'), p.join(homedir, 'Desktop', 'Chui Reference Apps', 'jspm', 'SFCoffee', 'css'), noop);
-      cpFile(p.join(chocolatechipui_path, 'cli-resources', 'jspm', 'dist', 'chui.min.js'), p.join(homedir, 'Desktop', 'Chui Reference Apps', 'jspm', 'SFCoffee', 'js', 'chui.min.js'), noop);
-      cpFile(p.join(chocolatechipui_path, 'cli-resources', 'jspm', 'dist', 'chui.min.js.map'), p.join(homedir, 'Desktop', 'Chui Reference Apps', 'jspm', 'SFCoffee', 'js', 'chui.min.js.map'), noop);
-      ncp(p.join(chocolatechipui_path, 'cli-resources', 'jspm',  'src'), p.join(homedir, 'Desktop', 'Chui Reference Apps', 'jspm', 'SFCoffee', 'dev', 'src'), noop);
-
-      ncp(p.join(chocolatechipui_path, 'dist', 'css'), p.join(homedir, 'Desktop', 'Chui Reference Apps', 'jspm', 'TodoMVC', 'css'), noop);
-      cpFile(p.join(chocolatechipui_path, 'cli-resources', 'jspm', 'dist', 'chui.min.js'), p.join(homedir, 'Desktop', 'Chui Reference Apps', 'jspm', 'TodoMVC', 'js', 'chui.min.js'), noop);
-      cpFile(p.join(chocolatechipui_path, 'cli-resources', 'jspm', 'dist', 'chui.min.js.map'), p.join(homedir, 'Desktop', 'Chui Reference Apps', 'jspm', 'TodoMVC', 'js', 'chui.min.js.map'), noop);
-      ncp(p.join(chocolatechipui_path, 'cli-resources', 'jspm',  'src'), p.join(homedir, 'Desktop', 'Chui Reference Apps', 'jspm', 'TodoMVC', 'dev', 'src'), noop);
-
-      ncp(p.join(chocolatechipui_path, 'dist', 'css'), p.join(homedir, 'Desktop', 'Chui Reference Apps', 'jspm', 'Vino', 'css'), noop);
-      cpFile(p.join(chocolatechipui_path, 'cli-resources', 'jspm', 'dist', 'chui.min.js'), p.join(homedir, 'Desktop', 'Chui Reference Apps', 'jspm', 'Vino', 'js', 'chui.min.js'), noop);
-      cpFile(p.join(chocolatechipui_path, 'cli-resources', 'jspm', 'dist', 'chui.min.js.map'), p.join(homedir, 'Desktop', 'Chui Reference Apps', 'jspm', 'Vino', 'js', 'chui.min.js.map'), noop);
-      ncp(p.join(chocolatechipui_path, 'cli-resources', 'jspm',  'src'), p.join(homedir, 'Desktop', 'Chui Reference Apps', 'jspm', 'Vino', 'dev', 'src'), noop);
-
-      if (typings) {
-
-        ncp(p.join(chocolatechipui_path, 'typings'), p.join(homedir, 'Desktop', 'Chui Reference Apps', 'jspm', 'Fragranž', 'typings'), noop);
-        writefile(p.join(homedir, 'Desktop', 'Chui Reference Apps', 'jspm', 'Fragranž', 'jsconfig.json'), jsconfig, noop);
-
-        ncp(p.join(chocolatechipui_path, 'typings'), p.join(homedir, 'Desktop', 'Chui Reference Apps', 'jspm', 'SFCoffee', 'typings'), noop);
-        writefile(p.join(homedir, 'Desktop', 'Chui Reference Apps', 'jspm', 'SFCoffee', 'jsconfig.json'), jsconfig, noop);
-
-        ncp(p.join(chocolatechipui_path, 'typings'), p.join(homedir, 'Desktop', 'Chui Reference Apps', 'jspm', 'TodoMVC', 'typings'), noop);
-        writefile(p.join(homedir, 'Desktop', 'Chui Reference Apps', 'jspm', 'TodoMVC', 'jsconfig.json'), jsconfig, noop);
-
-        ncp(p.join(chocolatechipui_path, 'typings'), p.join(homedir, 'Desktop', 'Chui Reference Apps', 'jspm', 'Vino', 'typings'), noop);
-        writefile(p.join(homedir, 'Desktop', 'Chui Reference Apps', 'jspm', 'Vino', 'jsconfig.json'), jsconfig, noop);
-      }
-
-    }, 100);
+    setTimeout(() => {
+      ['Fragranž', 'SFCoffee', 'TodoMVC', 'Vino'].forEach(app => {
+        copy(p.join(chocolatechipui_path, 'dist', 'css', '*'), p.join(p.join(homedir, 'Desktop'), 'Chui Reference Apps', app, 'css'), noop);
+        cpFile(p.join(chocolatechipui_path, 'dist', 'chui.min.js'), p.join(homedir, 'Desktop', 'Chui Reference Apps', app, 'js', 'chui.min.js'), noop
+      );
+        cpFile(p.join(chocolatechipui_path, 'dist', 'chui.min.js.map'), p.join(homedir, 'Desktop', 'Chui Reference Apps', app, 'js', 'chui.min.js.map'), noop);
+      })
+    }, 100)
   };
 
   /**
    * Create a web project as designated by developer 
    */
   const createJSProject = () => {
-
-    /**
-     * Create plain JavaScript project
-     */
-    const createPlainJSProject = () => {
-      console.log('You can double click this app to launch it.');
-
-      ncp.limit = 16;
-      mkdirp(p.join(path, name), noop);
-      mkdirp(p.join(path, name, 'js'), noop);
-      mkdirp(p.join(path, name, 'css'), noop);
-      ncp(p.join(chocolatechipui_path, 'dist', 'css'), p.join(path, name, 'css'), noop);
-
-      cpFile(p.join(chocolatechipui_path, 'dist', 'chui.min.js'), p.join(path, name, 'js', 'chui.min.js'), noop);
-      cpFile(p.join(chocolatechipui_path, 'dist', 'chui.min.js.map'), p.join(path, name, 'js', 'chui.min.js.map'), noop);
-
-
-      if (type && (type === 'navigation') || (type === 'n')) {
-        ncp(p.join(chocolatechipui_path, 'cli-resources', 'for-desktop',  'chui-navigation', 'js'), p.join(path, name, 'js'), noop);
-        ncp(p.join(chocolatechipui_path, 'cli-resources', 'for-desktop',  'chui-navigation', 'css'), p.join(path, name, 'css'), noop);
-        cpFile(p.join(chocolatechipui_path, 'cli-resources', 'for-desktop',  'chui-navigation', 'index.html'), p.join(path, name, 'index.html'), noop);
-
-      } else if (type && (type === 'tabbar') || (type === 't')) {
-        ncp(p.join(chocolatechipui_path, 'cli-resources', 'for-desktop',  'chui-tabbar', 'js'), p.join(path, name, 'js'), noop);
-        ncp(p.join(chocolatechipui_path, 'cli-resources', 'for-desktop',  'chui-tabbar', 'css'), p.join(path, name, 'css'), noop);
-        ncp(p.join(chocolatechipui_path, 'cli-resources', 'for-desktop',  'chui-tabbar', 'images'), p.join(path, name, 'images'), noop);
-        cpFile(p.join(chocolatechipui_path, 'cli-resources', 'for-desktop',  'chui-tabbar', 'index.html'), p.join(path, name, 'index.html'), noop);
-
-      } else if (type && (type === 'slideout') || (type === 's')) {
-        ncp(p.join(chocolatechipui_path, 'cli-resources', 'for-desktop',  'chui-slideout', 'js'), p.join(path, name, 'js'), noop);
-        ncp(p.join(chocolatechipui_path, 'cli-resources', 'for-desktop',  'chui-slideout', 'css'), p.join(path, name, 'css'), noop);
-        cpFile(p.join(chocolatechipui_path, 'cli-resources', 'for-desktop',  'chui-slideout', 'index.html'), p.join(path, name, 'index.html'), noop);
-
-      } else {
-        ncp(p.join(chocolatechipui_path, 'cli-resources', 'for-desktop',  'chui-basic', 'js'), p.join(path, name, 'js'), noop);
-        ncp(p.join(chocolatechipui_path, 'cli-resources', 'for-desktop',  'chui-basic', 'css'), p.join(path, name, 'css'), noop);
-        cpFile(p.join(chocolatechipui_path, 'cli-resources', 'for-desktop',  'chui-basic', 'index.html'), p.join(path, name, 'index.html'), noop);
-      }
-    }
-
-    /**
-     * Create project with JSPM
-     */
-    const createJSPMProject = () => {
-      console.log('This project uses JSPM so you can write ES6 modules.');
+    const createJSProject = () => {
+      console.log('This project uses ES6 modules.');
       console.log('It will require a build step to launch it.');
 
       ncp.limit = 16;
       mkdirp(p.join(path, name), noop);
       mkdirp(p.join(path, name, 'js'), noop);
-      mkdirp(p.join(path, name, 'dev'), noop);
+      mkdirp(p.join(path, name, 'dev', 'src'), noop);
       ncp(p.join(chocolatechipui_path, 'dist', 'css'), p.join(path, name, 'css'), noop);
+      ncp(p.join(chocolatechipui_path, 'dist', 'widgets'), p.join(path, name, 'dev', 'src', 'widgets'), noop);
+      ncp(p.join(chocolatechipui_path, 'dist', 'utils'), p.join(path, name, 'dev', 'src', 'utils'), noop);
+      cpFile(p.join(chocolatechipui_path, 'dist', 'chui.min.js'), p.join(path, name, 'js', 'chui.min.js'), noop);
+      cpFile(p.join(chocolatechipui_path, 'dist', 'chui.min.js.map'), p.join(path, name, 'js', 'chui.min.js.map'), noop);
+      
+      cpFile(p.join(chocolatechipui_path, 'cli-resources', '.editorconfig'), p.join(path, name, '.editorconfig'), noop);
+      cpFile(p.join(chocolatechipui_path, 'cli-resources', '.babelrc'), p.join(path, name, '.babelrc'), noop);
+      cpFile(p.join(chocolatechipui_path, 'cli-resources', 'gulpfile.js'), p.join(path, name, 'gulpfile.js'), noop);
+      cpFile(p.join(chocolatechipui_path, 'cli-resources', 'package.json'), p.join(path, name, 'package.json'), noop);
 
-      cpFile(p.join(chocolatechipui_path, 'cli-resources', 'jspm', 'config.js'), p.join(path, name, 'config.js'), noop);
-      cpFile(p.join(chocolatechipui_path, 'cli-resources', 'jspm', 'gulpfile.js'), p.join(path, name, 'gulpfile.js'), noop);
-      cpFile(p.join(chocolatechipui_path, 'cli-resources', 'jspm', 'package.json'), p.join(path, name, 'package.json'), noop);
-
-      if (box) {
-        console.log('We are boxing')
-        cpFile(p.join(chocolatechipui_path, 'dist', 'chui-box.min.js'), p.join(path, name, 'js', 'chui-box.min.js'), noop);
-        cpFile(p.join(chocolatechipui_path, 'dist', 'chui-box.min.js.map'), p.join(path, name, 'js', 'chui-box.min.js.map'), noop);
-
-      } else if (custom) {
-        console.log('Creating a custom project.')
-        cpFile(p.join(chocolatechipui_path, 'cli-resources', 'jspm', 'dist', 'chui.min.js'), p.join(path, name, 'js', 'chui.min.js'), noop);
-        cpFile(p.join(chocolatechipui_path, 'cli-resources', 'jspm', 'dist', 'chui.min.js.map'), p.join(path, name, 'js', 'chui.min.js.map'), noop);
-        mkdirp(p.join(path, name, 'cli-resources', 'jspm',  'src'), noop)
-        setTimeout(function() {
-          ncp(p.join(chocolatechipui_path, 'cli-resources', 'jspm',  'src'), p.join(path, name, 'dev', 'src'), noop);
-        }, 200);
-
-      } else {
-        cpFile(p.join(chocolatechipui_path, 'dist', 'chui.min.js'), p.join(path, name, 'js', 'chui.min.js'), noop);
-        cpFile(p.join(chocolatechipui_path, 'dist', 'chui.min.js.map'), p.join(path, name, 'js', 'chui.min.js.map'), noop);
+      const createProj = (type) => {
+        ncp(p.join(chocolatechipui_path, 'cli-resources',  type, 'dev'), p.join(path, name, 'dev'), noop);
+        cpFile(p.join(chocolatechipui_path, 'cli-resources',  type, 'index.html'), p.join(path, name, 'index.html'), noop);
       }
 
       if (type === 'navigation') {
-        ncp(p.join(chocolatechipui_path, 'cli-resources', 'jspm',  'navigation', 'dev'), p.join(path, name, 'dev'), noop);
-        cpFile(p.join(chocolatechipui_path, 'cli-resources', 'jspm',  'navigation', 'index.html'), p.join(path, name, 'index.html'), noop);
+        createProj('navigation')
 
       } else if (type === 'slideout') {
-        ncp(p.join(chocolatechipui_path, 'cli-resources', 'jspm',  'slideout', 'dev'), p.join(path, name, 'dev'), noop);
-        cpFile(p.join(chocolatechipui_path, 'cli-resources', 'jspm',  'slideout', 'index.html'), p.join(path, name, 'index.html'), noop);
+        createProj('slideout')
 
       } else if (type === 'tabbar') {
-        ncp(p.join(chocolatechipui_path, 'cli-resources', 'jspm',  'tabbar', 'dev'), p.join(path, name, 'dev'), noop);
-        ncp(p.join(chocolatechipui_path, 'cli-resources', 'jspm',  'tabbar', 'images'), p.join(path, name, 'images'), noop);
-        cpFile(p.join(chocolatechipui_path, 'cli-resources', 'jspm',  'tabbar', 'css', 'app.css'), p.join(path, name, 'css', 'app.css'), noop);
-        cpFile(p.join(chocolatechipui_path, 'cli-resources', 'jspm',  'tabbar', 'index.html'), p.join(path, name, 'index.html'), noop);
+        createProj('tabbar')
+        ncp(p.join(chocolatechipui_path, 'cli-resources',  'tabbar', 'images'), p.join(path, name, 'images'), noop);
+        cpFile(p.join(chocolatechipui_path, 'cli-resources',  'tabbar', 'css', 'app.css'), p.join(path, name, 'css', 'app.css'), noop);
 
       } else {
-        ncp(p.join(chocolatechipui_path, 'cli-resources', 'jspm',  'basic', 'dev'), p.join(path, name, 'dev'), noop);
-        cpFile(p.join(chocolatechipui_path, 'cli-resources', 'jspm',  'basic', 'index.html'), p.join(path, name, 'index.html'), noop);
-
+        createProj('basic')
       }
     }
 
     console.log('Creating a project named: ' + name);
 
-    /**
-     * If user request typings, output TypeScript delcaration file.
-     */
-    if (typings) {
-      ncp(p.join(chocolatechipui_path, 'typings'), p.join(path, name, 'typings'), noop);
-      writefile(p.join(path, name, 'jsconfig.json'), jsconfig, noop);
 
-    }
-    if (jspm) {
-      createJSPMProject();
+    if (type) {
+      createJSProject();
       setTimeout(function() {
         replace({
-          replace: /CHUI_APP_NAME/g,
+          replace: /chui_app_name/g,
           with: name,
           files: [
             p.join(path, name, 'index.html'),
@@ -437,15 +293,25 @@ const chui = (() => {
             p.join(path, name, 'index.html'),
           ],
         });
-      }, 380);
+        if (os === 'android') {
+          replace({
+            replace: /import/,
+            with: `import './src/widgets/android-ripple'
+import`,
+          files: [p.join(path, name, 'dev', 'app.js')]
+          })
+        } else {
+          console.log('nothing to replace!')
+        }
+      }, 2380); 
 
       return;
 
     } else {
-      createPlainJSProject();
+      createJSProject();
       setTimeout(function() {
         replace({
-          replace: /CHUI_APP_NAME/g,
+          replace: /chui_app_name/g,
           with: name,
           files: [
             p.join(path, name, 'index.html')
@@ -458,7 +324,15 @@ const chui = (() => {
             p.join(path, name, 'index.html'),
           ],
         });
-      }, 380);
+        if (os === 'android') {
+          replace({
+            replace: /import/,
+            with: `import './src/widgets/android-ripple',
+          files: [p.join(path, name, 'dev', 'app.js')]
+import`
+          })
+        }
+      }, 380); 
     }
   };
 
@@ -470,14 +344,17 @@ const chui = (() => {
     console.log('ATTENTION: Arguments missing.');
     console.log('To output the examples, use: chui -e');
     console.log('To output the reference apps, use: chui -r');
-    console.log('To create a project for an app, use: chui -n myApp');
-    console.log('(Replace myApp with the name for your app)');
-    console.log('To create a project with JSPM, use: chui -n myApp -j');
-    console.log('To create a project with Box, use: chui -n myApp -b');
-    console.log('To create a project with Box and JSPM, use: chui -n myApp -j -b');
-    console.log('To create a project type, use the flag -t: chui -n myApp -t navigation or chui -n myApp -t slideout or chui -n myApp -t tabbar');
-    console.log('To create a project for a specific os, use the -o flag: chui -n myApp -o android or chui -n myApp -o ios or chui -n myApp -o windows');
-    console.log('To create a project with minimal version for custom build, use the -c flag: chui -n myApp -j -c')
+    console.log('To create a project for an app, use: chui -n my-app');
+    console.log('(Replace my-app with the name for your app)');
+    console.log('To create a JavaScript project, use: chui -n my-app');
+    console.log('To create a project type, use the flag -t: with one of the flowing: basic, navigation, slideout, tabbar.')
+    console.log('chui -n my-app -t basic');
+    console.log('chui -n my-app -t navigation');
+    console.log('chui -n my-app -t slideout');
+    console.log('chui -n my-app -t tabbar');
+    console.log('To create a project for a specific os, use the -o flag: android, ios');
+    console.log('chui -n my-app -o android')
+    console.log('chui -n my-app -o ios')
   };
 
   /**
