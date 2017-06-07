@@ -300,8 +300,6 @@ const chui = (() => {
 import`,
           files: [p.join(path, name, 'dev', 'app.js')]
           })
-        } else {
-          console.log('nothing to replace!')
         }
       }, 2380); 
 
