@@ -323,12 +323,15 @@ import`,
           ],
         });
         if (os === 'android') {
-          replace({
-            replace: /import/,
-            with: `import './src/widgets/android-ripple',
-          files: [p.join(path, name, 'dev', 'app.js')]
-import`
-          })
+          try {
+            replace({
+              replace: /import/,
+              with: `import './src/widgets/android-ripple',
+            files: [p.join(path, name, 'dev', 'app.js')]
+  import`
+            })
+          } catch(err) {}
+
         }
       }, 380); 
     }
