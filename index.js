@@ -21,7 +21,8 @@ const chui = (() => {
   /**
    * Create variables based on commandline arguments
    */
-  const name = argv.name || argv.n;
+  const originalName = argv.name || argv.n;
+  const name = originalName.toLowerCase()
   let os = argv.os || argv.o || 'ios';
   os = os.toLowerCase();
   const type = argv.type || argv.t;
@@ -30,13 +31,10 @@ const chui = (() => {
   if (name) {
     var appPath = p.join(homedir, 'Desktop', name);
   }
-  const browsersync = argv.browsersync || argv.b;
   const chui_examples = argv.examples || argv.e;
   const reference_apps = argv.refapps || argv.r;
   const icons = argv.icons || argv.i || false;
   const website = argv.website || argv.w;
-  const typings = argv.ts;
-  const custom = argv.custom || argv.c;
 
   const noop = function() {};
   const chocolatechipui_path = p.join(__dirname, 'node_modules', 'chocolatechipui');
@@ -48,52 +46,52 @@ const chui = (() => {
   const createiOSProject = () => {
     console.log('Creating an Xcode project.');
     mkdirp(appPath);
-    mkdirp(p.join(appPath, name + '.xcodeproj'));
-    mkdirp(p.join(appPath, name, 'Base.lproj'));
+    mkdirp(p.join(appPath, originalName + '.xcodeproj'));
+    mkdirp(p.join(appPath, originalName, 'Base.lproj'));
 
     /**
      * Create Swift files and Info.plist:
      */
-    writefile(p.join(appPath, name, 'AppDelegate.swift'), iosTemplates.appDelegate, noop);
-    writefile(p.join(appPath, name, 'ViewController.swift'), iosTemplates.viewController, noop);
-    writefile(p.join(appPath, name, 'Info.plist'), iosTemplates.infoPlist);
+    writefile(p.join(appPath, originalName, 'AppDelegate.swift'), iosTemplates.appDelegate, noop);
+    writefile(p.join(appPath, originalName, 'ViewController.swift'), iosTemplates.viewController, noop);
+    writefile(p.join(appPath, originalName, 'Info.plist'), iosTemplates.infoPlist);
 
     /**
      * Create Base.lproj files:
      */
-    writefile(p.join(appPath, name, 'Base.lproj', 'Main.storyboard'), iosTemplates.mainStoryboard, noop);
-    writefile(p.join(appPath, name, 'Base.lproj', 'launchScreen.storyboard'), iosTemplates.launchScreenStoryboard, noop);
+    writefile(p.join(appPath, originalName, 'Base.lproj', 'Main.storyboard'), iosTemplates.mainStoryboard, noop);
+    writefile(p.join(appPath, originalName, 'Base.lproj', 'launchScreen.storyboard'), iosTemplates.launchScreenStoryboard, noop);
 
     /**
      * Create AppIcon Contents file:
      */
     if (icons) {
-      ncp(p.join(icons, appPath, name, 'Assets.xcassets'), noop);
+      ncp(p.join(icons, appPath, originalName, 'Assets.xcassets'), noop);
 
     } else {
-      ncp(p.join(__dirname, 'ios', 'icons'), p.join(appPath, name, 'Assets.xcassets'));
+      ncp(p.join(__dirname, 'ios', 'icons'), p.join(appPath, originalName, 'Assets.xcassets'));
     }
 
     /**
      * Write JSON files for icons and launch images:
      */
-    writefile(p.join(appPath, name, 'Assets.xcassets', 'AppIcon.appiconset', 'Contents.json'), iosTemplates.appiconset, noop);
-    writefile(p.join(appPath, name, 'Assets.xcassets', 'iTunesArtwork.imageset', 'Contents.json'), iosTemplates.itunesartwork, noop);
-    writefile(p.join(appPath, name, 'Assets.xcassets', 'LaunchImage.launchimage', 'Contents.json'), iosTemplates.launchimages, noop);
+    writefile(p.join(appPath, originalName, 'Assets.xcassets', 'AppIcon.appiconset', 'Contents.json'), iosTemplates.appiconset, noop);
+    writefile(p.join(appPath, originalName, 'Assets.xcassets', 'iTunesArtwork.imageset', 'Contents.json'), iosTemplates.itunesartwork, noop);
+    writefile(p.join(appPath, originalName, 'Assets.xcassets', 'LaunchImage.launchimage', 'Contents.json'), iosTemplates.launchimages, noop);
 
 
-    writefile(p.join(appPath, name + '.xcodeproj', 'xcuserdata', 'xcdegugger'), iosTemplates.debugger, noop);
+    writefile(p.join(appPath, originalName + '.xcodeproj', 'xcuserdata', 'xcdegugger'), iosTemplates.debugger, noop);
 
     /**
      * Create xcuserdata files:
      */
-    writefile(p.join(appPath, name + '.xcodeproj', 'xcuserdata', user + '.xcschemes', user + '.xcschemes'), iosTemplates.xcscheme, noop);
-    writefile(p.join(appPath, name + '.xcodeproj', 'xcuserdata', user + '.xcschemes', 'xcschememanagement.plist'), iosTemplates.xcschememanagement, noop);
+    writefile(p.join(appPath, originalName + '.xcodeproj', 'xcuserdata', user + '.xcschemes', user + '.xcschemes'), iosTemplates.xcscheme, noop);
+    writefile(p.join(appPath, originalName + '.xcodeproj', 'xcuserdata', user + '.xcschemes', 'xcschememanagement.plist'), iosTemplates.xcschememanagement, noop);
 
     /**
      * Create pbxproj file:
      */
-    writefile(p.join(appPath, name + '.xcodeproj', 'project.pbxproj'), iosTemplates.pbxproj, noop);
+    writefile(p.join(appPath, originalName + '.xcodeproj', 'project.pbxproj'), iosTemplates.pbxproj, noop);
 
     /**
      * Create the Website index file:
@@ -103,7 +101,7 @@ const chui = (() => {
     /**
      * Create tests:
      */
-    writefile(p.join(appPath, name + 'Tests', name + 'Tests.swift'), iosTemplates.testsSwift, noop);
+    writefile(p.join(appPath, originalName + 'Tests', originalName + 'Tests.swift'), iosTemplates.testsSwift, noop);
     writefile(p.join(appPath, name + 'Tests', 'Info.plist'), iosTemplates.testsPlist, noop);
 
     /**
@@ -125,7 +123,7 @@ const chui = (() => {
    * Create Android project for Android Studio 
    */
   const createAndroidProject = () => {
-    console.log('creating and android app');
+    console.log('Creating an android app.');
 
     /**
      * First level files:
@@ -280,7 +278,7 @@ const chui = (() => {
       setTimeout(function() {
         replace({
           replace: /chui_app_name/g,
-          with: name,
+          with: originalName,
           files: [
             p.join(path, name, 'index.html'),
             p.join(path, name, 'package.json')
@@ -310,7 +308,7 @@ import`,
       setTimeout(function() {
         replace({
           replace: /chui_app_name/g,
-          with: name,
+          with: originalName,
           files: [
             p.join(path, name, 'index.html')
           ],
