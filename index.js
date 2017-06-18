@@ -22,7 +22,7 @@ const chui = (() => {
    * Create variables based on commandline arguments
    */
   const originalName = argv.name || argv.n;
-  const name = originalName.toLowerCase()
+  const name = originalName ? originalName.toLowerCase() : ''
   let os = argv.os || argv.o || 'ios';
   os = os.toLowerCase();
   const type = argv.type || argv.t;
