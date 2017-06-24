@@ -241,7 +241,7 @@ const chui = (() => {
       console.log('Open the terminal and "cd" to the project folder.')
       console.log('Then run "npm i" to install the project\'s dependencies.')
       console.log('After that you can build the project with: "gulp build".')
-      console.log('Or you can build and launch the project in your browser by executing: "gulp" in the temrinal.')
+      console.log('Or you can build and launch the project in your browser by executing: "gulp" in the terminal.')
 
       ncp.limit = 16
       mkdirp(p.join(path, name), noop)
