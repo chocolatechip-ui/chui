@@ -352,6 +352,8 @@ import`,
   const warnNoArgs = () => {
     console.log('')
     console.log('ATTENTION: Arguments missing.')
+    console.log('To find out what version of chui you are using, run:')
+    console.log('`chui --version` or `chui -v`')
     console.log('To output the examples, use: chui -e')
     console.log('To output the reference apps, use: chui -r')
     console.log('To create a project for an app, use: chui -n my-app')
