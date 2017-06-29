@@ -28,6 +28,11 @@ const chui = (() => {
   const type = argv.type || argv.t
   const hybrid = argv.hybrid || argv.h
   const path = argv.path || argv.p || p.join(homedir, 'Desktop')
+  const version = argv.version || argv.v
+  if (version) {
+    console.log(pkg.version)
+    return
+  }
   if (name) {
     var appPath = p.join(homedir, 'Desktop', name)
   }
