@@ -1,6 +1,6 @@
 {
   "name": "chui",
-  "version": "3.1.1",
+  "version": "3.1.2",
   "description": "A module for creating Web apps with ChocolateChip-UI",
   "main": "index.js",
   "bin": {
@@ -27,7 +27,7 @@
   "homepage": "https://github.com/chocolatechip-ui/chui#readme",
   "dependencies": {
     "chai": "^3.5.0",
-    "chocolatechipui": "~5.0.19",
+    "chocolatechipui": "~5.0.20",
     "copy": "^0.3.0",
     "cp-file": "^3.2.0",
     "cpr": "^2.0.0",
