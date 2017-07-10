@@ -33,6 +33,7 @@ const chui = (() => {
     console.log(pkg.version)
     return
   }
+  const jsx = argv.x
   if (name) {
     var appPath = p.join(homedir, 'Desktop', name)
   }
@@ -242,6 +243,7 @@ const chui = (() => {
   const createJSProject = () => {
     const createJSProject = () => {
       console.log('This project uses ES6 modules.')
+      if (jsx) console.log('This project can use JSX in components.')
       console.log('It will require a build step to launch it.')
       console.log('Open the terminal and "cd" to the project folder.')
       console.log('Then run "npm i" to install the project\'s dependencies.')
@@ -259,12 +261,22 @@ const chui = (() => {
       cpFile(p.join(chocolatechipui_path, 'dist', 'chui.min.js.map'), p.join(path, name, 'js', 'chui.min.js.map'), noop)
       
       cpFile(p.join(chocolatechipui_path, 'cli-resources', '.editorconfig'), p.join(path, name, '.editorconfig'), noop)
-      cpFile(p.join(chocolatechipui_path, 'cli-resources', '.babelrc'), p.join(path, name, '.babelrc'), noop)
+      if (jsx) {
+        cpFile(p.join(chocolatechipui_path, 'cli-resources', 'jsx', '.babelrc'), p.join(path, name, '.babelrc'), noop)
+        cpFile(p.join(chocolatechipui_path, 'cli-resources', 'jsx', 'package.json'), p.join(path, name, 'package.json'), noop)
+      } else {
+        cpFile(p.join(chocolatechipui_path, 'cli-resources', '.babelrc'), p.join(path, name, '.babelrc'), noop)
+        cpFile(p.join(chocolatechipui_path, 'cli-resources', 'package.json'), p.join(path, name, 'package.json'), noop)
+      }
       cpFile(p.join(chocolatechipui_path, 'cli-resources', 'gulpfile.js'), p.join(path, name, 'gulpfile.js'), noop)
-      cpFile(p.join(chocolatechipui_path, 'cli-resources', 'package.json'), p.join(path, name, 'package.json'), noop)
+      
 
       const createProj = (type) => {
-        ncp(p.join(chocolatechipui_path, 'cli-resources',  type, 'dev'), p.join(path, name, 'dev'), noop)
+        if (jsx) {
+          ncp(p.join(chocolatechipui_path, 'cli-resources',  type, 'jsx', 'dev'), p.join(path, name, 'dev'), noop)
+        } else {
+          ncp(p.join(chocolatechipui_path, 'cli-resources',  type, 'dev'), p.join(path, name, 'dev'), noop)
+        }
         cpFile(p.join(chocolatechipui_path, 'cli-resources',  type, 'index.html'), p.join(path, name, 'index.html'), noop)
       }
 
@@ -289,12 +301,19 @@ const chui = (() => {
 
     if (type) {
       createJSProject()
+      const packageName = name.replace(' ', '-')
       setTimeout(function() {
         replace({
           replace: /chui_app_name/g,
           with: originalName,
           files: [
-            p.join(path, name, 'index.html'),
+            p.join(path, name, 'index.html')
+          ],
+        })
+        replace({
+          replace: /chui_app_name/g,
+          with: packageName.toLowerCase(),
+          files: [
             p.join(path, name, 'package.json')
           ],
         })
@@ -356,17 +375,20 @@ import`,
     console.log('`chui --version` or `chui -v`')
     console.log('To output the examples, use: chui -e')
     console.log('To output the reference apps, use: chui -r')
-    console.log('To create a project for an app, use: chui -n my-app')
-    console.log('(Replace my-app with the name for your app)')
-    console.log('To create a JavaScript project, use: chui -n my-app')
+    console.log('To create a project for an app, use: chui -n MyApp')
+    console.log('Replace MyApp with the name for your app.')
+    console.log('If you want to have a multi-word name, surround it in quotes:')
+    console.log('chui -n "My App"')
+    console.log('To create a JavaScript project, use: chui -n MyApp')
     console.log('To create a project type, use the flag -t: with one of the flowing: basic, navigation, slideout, tabbar.')
-    console.log('chui -n my-app -t basic')
-    console.log('chui -n my-app -t navigation')
-    console.log('chui -n my-app -t slideout')
-    console.log('chui -n my-app -t tabbar')
+    console.log('chui -n MyApp -t basic')
+    console.log('chui -n MyApp -t navigation')
+    console.log('chui -n MyApp -t slideout')
+    console.log('chui -n MyApp -t tabbar')
     console.log('To create a project for a specific os, use the -o flag: android, ios')
-    console.log('chui -n my-app -o android')
-    console.log('chui -n my-app -o ios')
+    console.log('chui -n MyApp -o android')
+    console.log('chui -n MyApp -o ios')
+    console.log('To create a project with support for JSX, use the -x flag.')
   }
 
   /**
