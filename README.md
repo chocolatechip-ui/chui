@@ -49,6 +49,7 @@ To create a simple JavaScript project without the need to running a server, you 
 1. -n (project name)
 2. -o (ios or android)
 3. -t (basic, navigation, slideout, tabbar)
+4. -x (support for JSX)
 
 Here are example's of using `chui` with these options:
 
@@ -60,6 +61,8 @@ chui -n myProject -o android -t slideout
 chui -n myProject -o android -t tabbar
 # Default (basic):
 chui -n myProject -o android
+# Same project with support for JSX:
+chui -n myProject -o android -x
 ```
 
 ```sh
@@ -70,6 +73,8 @@ chui -n myProject -o ios -t slideout
 chui -n myProject -o ios -t tabbar
 # Default (basic):
 chui -n myProject
+# Same project with support for JSX:
+chui -n myProject -x
 ```
 
 If you leave off the  `-o` flag, it will default to iOS. Similarly, if you leave off the `-t` flag it will default to type basic. So, you could create a basic project with this:
