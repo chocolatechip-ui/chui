@@ -298,10 +298,9 @@ const chui = (() => {
 
     console.log('Creating a project named: ' + name)
 
-
+    const packageName = name.replace(' ', '-')
     if (type) {
       createJSProject()
-      const packageName = name.replace(' ', '-')
       setTimeout(function() {
         replace({
           replace: /chui_app_name/g,
@@ -344,6 +343,13 @@ import`,
           with: originalName,
           files: [
             p.join(path, name, 'index.html')
+          ],
+        })
+        replace({
+          replace: /chui_app_name/g,
+          with: packageName.toLowerCase(),
+          files: [
+            p.join(path, name, 'package.json')
           ],
         })
         replace({
